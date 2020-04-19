@@ -11,7 +11,7 @@ import tqdm
 import time
 import imp
 import random
-import spatialstatWUCCI.distribution_simulator as sswdistsim
+import spatialstat.ppsim as ppsim
 
 # spest: general spatial pattern analysis
 def spest(input_array_ref, input_array_all, rstart, rend, 
@@ -204,9 +204,12 @@ def countlistgenerator(input_array_ref, input_array_all, rstart, rend,
     # add index to the input array
     input_array_ref = arrayaddidx(input_array_ref) 
 
+    # print(input_array_ref)
+
     for i in tqdm.trange(pointcountref):
         # assign ref point
-        refxy = input_array_ref[i, :2]
+        # refxy = input_array_ref[i, :2]
+        refxy = input_array_ref[i, 1:3]
         refidx = int(input_array_ref[i, 0])
 
         # get distance from points to ref point
@@ -217,7 +220,7 @@ def countlistgenerator(input_array_ref, input_array_all, rstart, rend,
         ylimmin = refxy[1] - rend
         ylimmax = refxy[1] + rend
 
-        input_array_all_temp = sswdistsim.xyroi(input_array_all_temp, xlimmin, xlimmax, ylimmin, ylimmax)
+        input_array_all_temp = ppsim.xyroi(input_array_all_temp, xlimmin, xlimmax, ylimmin, ylimmax)
         
         deltaxy2 = np.square(input_array_all_temp - np.array(refxy))
         distance = np.sqrt(deltaxy2[:, 0] + deltaxy2[:, 1])
@@ -232,6 +235,6 @@ def countlistgenerator(input_array_ref, input_array_all, rstart, rend,
 
         # add counts to countlist
         countlist[i] = count   
-    
+        
     return (countlist, RList, pointcountref, pointcountall)
 
