@@ -206,7 +206,7 @@ def countlistgenerator(input_array_ref, input_array_all, rstart, rend,
 
     # print(input_array_ref)
 
-    for i in tqdm.trange(pointcountref):
+    for i in range(pointcountref):
         # assign ref point
         # refxy = input_array_ref[i, :2]
         refxy = input_array_ref[i, 1:3]
