@@ -119,15 +119,13 @@ def ThomasPP(rt, sigma, mu, N = None, ndimension = 2, rangelim = None, seed = No
             child_count = scipy.stats.poisson(mu).rvs(random_state=seedtmp)
             seedtmp += seedmodifier
         count_list.append(child_count)
-    # print(count_list)
+
     # return total number for the childern points
     total_count = sum(count_list)
     # create the index for start and end
     childern_idx_start = np.concatenate([np.array([0]), np.cumsum(count_list)[0: -1]])
-    # print(childern_idx_start)
     childern_ide_end = np.cumsum(count_list)
-    # print(childern_ide_end)
-    
+
     # <array pre-allocation>
     array_points_childern = np.zeros([total_count, ndimension])
     
@@ -137,7 +135,7 @@ def ThomasPP(rt, sigma, mu, N = None, ndimension = 2, rangelim = None, seed = No
         childern_count = count_list[i]
         # return the coordinate for the given parent point
         parent = array_points_parents[i]
-        # <array pre-allocation>
+        # array pre-allocation
         array_temp = np.zeros([childern_count, ndimension])      
         for j in range(ndimension):
             parent_value = parent[j]
@@ -148,7 +146,7 @@ def ThomasPP(rt, sigma, mu, N = None, ndimension = 2, rangelim = None, seed = No
                 pdf = scipy.stats.norm(loc = parent_value, scale = sigma)  
                 array_temp[:, j] = list(pdf.rvs(childern_count, random_state = seedtmp))
                 seedtmp += seedmodifier
-        # print(array_temp)
+        
         array_points_childern[childern_idx_start[i]:childern_ide_end[i], :] = array_temp
     
     return(array_points_childern, array_points_parents)
